@@ -11,12 +11,15 @@ export class App extends Component {
       displayName:'',
       longitude:'',
       latitude:'',
+      error:false,
+      show:true,
     }
   }
   
   nameHandler=(e)=>{
     this.setState({
-      displayName: e.target.value
+      displayName: e.target.value,
+      
     })
   }
 
@@ -30,16 +33,28 @@ export class App extends Component {
       displayName: axiosData.data[0].display_name,
       longitude: axiosData.data[0].lon,
       latitude: axiosData.data[0].lat, 
+      error:true,
+      
+      
     })
-   
+  //  if (axiosData.data) {
+  //    this.setState({
+       
+  //    })
+  //  }
   }
   render() {
     return (
       <div>
+
+
+
         <form onSubmit={(e)=>{this.submitData(e)}}>
           <input type="text" placeholder="city name.." onChange={(e)=>{this.nameHandler(e)}} />
           <button>Explore!</button>
         </form>
+
+       {(this.state.error && this.state.longitude!=='') &&
 
         <Card style={{ width: '18rem' }}>
         <ListGroup variant="flush">
@@ -51,7 +66,13 @@ export class App extends Component {
         </ListGroup>
         </Card>
       
+        }
+
+        {(!this.state.error && this.state.show) &&
         
+        <h1>"error": "Unable to geocode"</h1>
+        
+        }
         
       </div>
     )
