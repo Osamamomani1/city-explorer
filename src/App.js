@@ -1,25 +1,85 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import axios from 'axios'
+import { Card,ListGroup } from 'react-bootstrap';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+export class App extends Component {
+
+  constructor(props){
+    super(props);
+    this.state={
+      displayName:'',
+      longitude:'',
+      latitude:'',
+      errormsg: '',
+      error:false,
+      show:false,
+    }
+  }
+  
+  nameHandler=(e)=>{
+    this.setState({
+      displayName: e.target.value,
+      
+    })
+  }
+
+  submitData=async (e)=>{
+    e.preventDefault()
+    try{ let axiosData= await axios.get(`https://eu1.locationiq.com/v1/search.php?key=pk.e266821f0ad39e21a46098fffe81ff92&city=${this.state.displayName}&format=json
+    
+    `)
+   
+    this.setState({
+      displayName: axiosData.data[0].display_name,
+      longitude: axiosData.data[0].lon,
+      latitude: axiosData.data[0].lat, 
+      show: true
+      
+      
+    })
+    }
+    catch(errormsg){
+      this.setState({
+        errormsg: 'error": "Unable to geocode',
+        error: true
+      })
+    }
+  }
+  render() {
+    return (
+      <div>
+
+        
+
+        <form onSubmit={(e)=>{this.submitData(e)}}>
+          <input type="text" placeholder="city name.." onChange={(e)=>{this.nameHandler(e)}} />
+          <button>Explore!</button>
+        </form>
+
+       {(this.state.show) &&
+
+        <Card style={{ width: '18rem' }}>
+        <ListGroup variant="flush">
+        <ListGroup.Item>city:  <h2>{this.state.displayName}</h2></ListGroup.Item>
+        <ListGroup.Item>longitude:  <h2>{this.state.longitude}</h2></ListGroup.Item>
+        <ListGroup.Item>latitude:  <h2>{this.state.latitude}</h2></ListGroup.Item>
+        <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=pk.e266821f0ad39e21a46098fffe81ff92
+        &center=${this.state.latitude},${this.state.longitude}&zoom=12&format=png`} width='400px' height='300px' />
+        </ListGroup>
+        </Card>
+      
+        }
+
+        {(this.state.error) &&
+        
+        <h1>{this.state.errormsg}</h1>
+        
+        }
+        
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App

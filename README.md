@@ -91,3 +91,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## Credit and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+
+***
+
+Name of feature: class6
+
+Estimate of time needed to complete: 3:00
+
+Start time: 2:30
+
+Finish time:7:00
+Actual time needed to complete: 5 h
