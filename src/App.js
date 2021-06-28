@@ -11,8 +11,9 @@ export class App extends Component {
       displayName:'',
       longitude:'',
       latitude:'',
+      errormsg: '',
       error:false,
-      show:true,
+      show:false,
     }
   }
   
@@ -25,7 +26,7 @@ export class App extends Component {
 
   submitData=async (e)=>{
     e.preventDefault()
-    let axiosData= await axios.get(`https://eu1.locationiq.com/v1/search.php?key=pk.e266821f0ad39e21a46098fffe81ff92&city=${this.state.displayName}&format=json
+    try{ let axiosData= await axios.get(`https://eu1.locationiq.com/v1/search.php?key=pk.e266821f0ad39e21a46098fffe81ff92&city=${this.state.displayName}&format=json
     
     `)
    
@@ -33,28 +34,30 @@ export class App extends Component {
       displayName: axiosData.data[0].display_name,
       longitude: axiosData.data[0].lon,
       latitude: axiosData.data[0].lat, 
-      error:true,
+      show: true
       
       
     })
-  //  if (axiosData.data) {
-  //    this.setState({
-       
-  //    })
-  //  }
+    }
+    catch(errormsg){
+      this.setState({
+        errormsg: 'error": "Unable to geocode',
+        error: true
+      })
+    }
   }
   render() {
     return (
       <div>
 
-
+        
 
         <form onSubmit={(e)=>{this.submitData(e)}}>
           <input type="text" placeholder="city name.." onChange={(e)=>{this.nameHandler(e)}} />
           <button>Explore!</button>
         </form>
 
-       {(this.state.error && this.state.longitude!=='') &&
+       {(this.state.show) &&
 
         <Card style={{ width: '18rem' }}>
         <ListGroup variant="flush">
@@ -68,9 +71,9 @@ export class App extends Component {
       
         }
 
-        {(!this.state.error && this.state.show) &&
+        {(this.state.error) &&
         
-        <h1>"error": "Unable to geocode"</h1>
+        <h1>{this.state.errormsg}</h1>
         
         }
         

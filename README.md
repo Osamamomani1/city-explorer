@@ -96,9 +96,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 Name of feature: class6
 
-Estimate of time needed to complete: 5
+Estimate of time needed to complete: 3:00
 
 Start time: 2:30
 
 Finish time:7:00
-Actual time needed to complete: i didnt complet yet
+Actual time needed to complete: 5 h
