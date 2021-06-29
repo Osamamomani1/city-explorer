@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Card,ListGroup } from 'react-bootstrap';
+import Weather from './components/Weather';
 
 
 export class App extends Component {
@@ -14,6 +15,8 @@ export class App extends Component {
       errormsg: '',
       error:false,
       show:false,
+      weather: false,
+      weatherInfo: {},
     }
   }
   
@@ -26,23 +29,27 @@ export class App extends Component {
 
   submitData=async (e)=>{
     e.preventDefault()
-    try{ let axiosData= await axios.get(`https://eu1.locationiq.com/v1/search.php?key=pk.e266821f0ad39e21a46098fffe81ff92&city=${this.state.displayName}&format=json
-    
-    `)
-   
+    let serverRoute = process.env.REACT_APP_SERVER;
+    let weatherUrl = `${serverRoute}/weather?city_name=${this.state.displayName.toLowerCase()}`;
+    try{ 
+      let axiosData= await axios.get(`https://eu1.locationiq.com/v1/search.php?key=pk.e266821f0ad39e21a46098fffe81ff92&city=${this.state.displayName}&format=json`)
+     
+      let weatherAxios = await axios.get(weatherUrl);
     this.setState({
       displayName: axiosData.data[0].display_name,
       longitude: axiosData.data[0].lon,
       latitude: axiosData.data[0].lat, 
-      show: true
-      
+      show: true,
+      weatherInfo: weatherAxios.data,
+      weather: true,
       
     })
     }
     catch(errormsg){
       this.setState({
         errormsg: 'error": "Unable to geocode',
-        error: true
+        error: true,
+        weather: false,
       })
     }
   }
@@ -68,7 +75,16 @@ export class App extends Component {
         &center=${this.state.latitude},${this.state.longitude}&zoom=12&format=png`} width='400px' height='300px' />
         </ListGroup>
         </Card>
-      
+
+
+        
+        }
+
+        {this.state.weather &&
+        <Weather
+        weather={this.state.weatherInfo}
+        cityName= {this.state.display_name}
+        />
         }
 
         {(this.state.error) &&
