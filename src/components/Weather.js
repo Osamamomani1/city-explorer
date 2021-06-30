@@ -15,19 +15,19 @@ export class Weather extends Component {
                         </tr>
                     </thead>
                     <tbody>
+                    
+                    {
 
-                        <tr>
-                            <td>{this.props.weather[0].date}</td>
-                            <td>{this.props.weather[0].description}</td>
-                        </tr>
-                        <tr>
-                            <td>{this.props.weather[1].date}</td>
-                            <td>{this.props.weather[1].description}</td>
-                        </tr>     <tr>
-                            <td>{this.props.weather[2].date}</td>
-                            <td>{this.props.weather[2].description}</td>
-                        </tr>
-                     
+                        this.props.weather.map(value=>{
+                            return(
+                                <tr>
+                            <td>{value.date}</td>
+                            <td>{value.description}</td>
+                            </tr>
+                            )
+                        })
+
+                    }
                     </tbody>
                 </Table> 
             </div>
